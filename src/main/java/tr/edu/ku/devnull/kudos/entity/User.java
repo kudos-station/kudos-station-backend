@@ -29,7 +29,7 @@ public class User {
     private String department;
 
     @Column(name = "password", nullable = false)
-    private String encryptedPassword;
+    private String password;
 
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
