@@ -35,7 +35,7 @@ public class KudosController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user/recent-kudos", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/user/recent-kudos")
     public ResponseEntity<List<KudosResponse>> recentKudos() {
         return new ResponseEntity<>(kudosService.getRecentKudos(), HttpStatus.OK);
     }
