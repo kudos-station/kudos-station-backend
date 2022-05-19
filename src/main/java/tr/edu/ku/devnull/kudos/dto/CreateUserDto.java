@@ -15,10 +15,7 @@ public class CreateUserDto {
     private String lastName;
 
     @NotNull
-    private String nickname;
-
-    @NotNull
-    private String department;
+    private String username;
 
     @NotNull
     private String password;

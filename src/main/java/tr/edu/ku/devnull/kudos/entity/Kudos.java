@@ -14,17 +14,14 @@ public class Kudos {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "kudos_id")
-    private Long kudosId;
+    private Long kudosID;
 
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
 
-    @Column(name = "recipient_nickname", nullable = false)
-    private String recipient;
+    @Column(name = "recipient_username", nullable = false)
+    private String recipientUsername;
 
-    @Column(name = "sender_nickname", nullable = false)
-    private String sender;
-
-    @Column(name = "content", nullable = false)
-    private String content;
+    @Column(name = "sender_username", nullable = false)
+    private String senderUsername;
 }

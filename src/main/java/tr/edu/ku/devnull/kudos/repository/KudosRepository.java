@@ -14,16 +14,16 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "INSERT INTO kudos(created_at, sender_nickname, recipient_nickname, content) VALUES" +
-            " (NOW(), ?1, ?2, ?3)", nativeQuery = true)
-    int insertKudos(String sender, String recipient, String content);
+    @Query(value = "INSERT INTO kudos(created_at, sender_username, recipient_username) VALUES" +
+            " (NOW(), ?1, ?2)", nativeQuery = true)
+    int insertKudos(String senderUsername, String recipientUsername);
 
     @Query(value = "SELECT * FROM kudos LIMIT 10", nativeQuery = true)
     List<Kudos> getRecentKudos();
 
-    @Query(value = "SELECT * FROM kudos AS K WHERE K.recipient_nickname = ?1 LIMIT 10", nativeQuery = true)
-    List<Kudos> getRecievedKudosByNicknameAndLimit(String nickname, String limit);
+    @Query(value = "SELECT * FROM kudos AS K WHERE K.recipient_username = ?1 LIMIT 10", nativeQuery = true)
+    List<Kudos> getReceivedKudosByUsernameAndLimit(String username, String limit);
 
-    @Query(value = "SELECT * FROM kudos AS K WHERE K.sender_nickname = ?1 LIMIT 10", nativeQuery = true)
-    List<Kudos> getSentKudosByNicknameAndLimit(String nickname, String limit);
+    @Query(value = "SELECT * FROM kudos AS K WHERE K.sender_username = ?1 LIMIT 10", nativeQuery = true)
+    List<Kudos> getSentKudosByUsernameAndLimit(String username, String limit);
 }

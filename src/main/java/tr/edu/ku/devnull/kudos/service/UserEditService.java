@@ -15,15 +15,12 @@ public class UserEditService {
 
     private final AuthorityRepository authorityRepository;
 
-    private final UserMapper userMapper;
-
     private final int IS_SUCCESSFUL = 1;
 
     @Autowired
-    public UserEditService(UserRepository userRepository, AuthorityRepository authorityRepository, UserMapper userMapper) {
+    public UserEditService(UserRepository userRepository, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
-        this.userMapper = userMapper;
     }
 
     public boolean createUser(CreateUserDto createUserDto) {
@@ -45,9 +42,9 @@ public class UserEditService {
         return statusForUser == IS_SUCCESSFUL;
     }
 
-    public boolean deleteUser(String nickname) {
-        int statusForRole = authorityRepository.deleteUserRoleByNickname(nickname);
-        int statusForUser = userRepository.deleteUserByNickname(nickname);
+    public boolean deleteUser(String username) {
+        int statusForRole = authorityRepository.deleteUserRoleByUsername(username);
+        int statusForUser = userRepository.deleteUserByUsername(username);
 
         return statusForRole == IS_SUCCESSFUL && statusForUser == IS_SUCCESSFUL;
     }

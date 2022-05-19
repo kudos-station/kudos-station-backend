@@ -2,7 +2,6 @@ package tr.edu.ku.devnull.kudos.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tr.edu.ku.devnull.kudos.dto.KudosDto;
 import tr.edu.ku.devnull.kudos.mapper.KudosMapper;
 import tr.edu.ku.devnull.kudos.repository.KudosRepository;
 import tr.edu.ku.devnull.kudos.response.KudosResponse;
@@ -24,13 +23,9 @@ public class KudosService {
         this.kudosMapper = kudosMapper;
     }
 
-    public boolean sendKudos(String sender, String recipient, KudosDto kudosDto) {
+    public boolean sendKudos(String sender, String recipient) {
 
-        if (kudosDto == null && kudosDto.getContent() == null) return false;
-        if (kudosDto.getContent() == null) return false;
-        if (kudosDto.getContent().length() < 10) return false;
-
-        int status = kudosRepository.insertKudos(sender, recipient, kudosDto.getContent());
+        int status = kudosRepository.insertKudos(sender, recipient);
 
         return status == IS_SUCCESSFUL;
     }
@@ -39,11 +34,11 @@ public class KudosService {
         return kudosMapper.entityListToResponseList(kudosRepository.getRecentKudos());
     }
 
-    public List<KudosResponse> getReceivedKudosByNicknameAndLimit(String nickname, String limit) {
-        return kudosMapper.entityListToResponseList(kudosRepository.getRecievedKudosByNicknameAndLimit(nickname, limit));
+    public List<KudosResponse> getReceivedKudosByUsernameAndLimit(String username, String limit) {
+        return kudosMapper.entityListToResponseList(kudosRepository.getReceivedKudosByUsernameAndLimit(username, limit));
     }
 
-    public List<KudosResponse> getSentKudosByNicknameAndLimit(String nickname, String limit) {
-        return kudosMapper.entityListToResponseList(kudosRepository.getSentKudosByNicknameAndLimit(nickname, limit));
+    public List<KudosResponse> getSentKudosByUsernameAndLimit(String username, String limit) {
+        return kudosMapper.entityListToResponseList(kudosRepository.getSentKudosByUsernameAndLimit(username, limit));
     }
 }
