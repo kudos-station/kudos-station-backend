@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tr.edu.ku.devnull.kudos.dto.CreateUserDto;
 import tr.edu.ku.devnull.kudos.dto.UpdateUserRoleDto;
-import tr.edu.ku.devnull.kudos.mapper.UserMapper;
 import tr.edu.ku.devnull.kudos.repository.AuthorityRepository;
 import tr.edu.ku.devnull.kudos.repository.UserRepository;
 

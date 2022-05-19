@@ -9,11 +9,21 @@ import org.springframework.transaction.annotation.Transactional;
 import tr.edu.ku.devnull.kudos.dto.CreateUserDto;
 import tr.edu.ku.devnull.kudos.entity.User;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM \"user\" as U WHERE U.username = ?1", nativeQuery = true)
     User getUserByUsername(String username);
+
+    @Query(value = "SELECT * FROM works_on AS WO, project AS P, \"user\" AS U" +
+            " WHERE WO.project_id = P.project_id AND U.user_id = WO.user_id AND P.project_name = ?1", nativeQuery = true)
+    List<User> getUsersByProjectName(String projectName);
+
+    @Query(value = "SELECT * FROM works_in AS WI, \"user\" AS U, department AS D" +
+            " WHERE WI.user_id = U.user_id AND D.department_name = ?1", nativeQuery = true)
+    List<User> getUsersByDepartmentName(String departmentName);
 
     @Transactional
     @Modifying(clearAutomatically = true)

@@ -10,8 +10,10 @@ import tr.edu.ku.devnull.kudos.repository.AuthorityRepository;
 import tr.edu.ku.devnull.kudos.repository.DepartmentRepository;
 import tr.edu.ku.devnull.kudos.repository.UserRepository;
 import tr.edu.ku.devnull.kudos.response.UserProfileResponse;
+import tr.edu.ku.devnull.kudos.response.UsernameListResponse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -59,5 +61,23 @@ public class UserService {
         userProfileResponse.setProjects(userProjects);
 
         return userProfileResponse;
+    }
+
+    public UsernameListResponse getUsersByProjectName(String projectName) {
+        return UsernameListResponse.builder()
+                .usernames(userRepository.getUsersByProjectName(projectName)
+                        .stream()
+                        .map(User::getUsername)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    public UsernameListResponse getUsersByDepartmentName(String departmentName) {
+        return UsernameListResponse.builder()
+                .usernames(userRepository.getUsersByDepartmentName(departmentName)
+                        .stream()
+                        .map(User::getUsername)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.ku.devnull.kudos.dto.CreateUserDto;
 import tr.edu.ku.devnull.kudos.dto.UpdateUserRoleDto;
-import tr.edu.ku.devnull.kudos.mapper.UserMapper;
 import tr.edu.ku.devnull.kudos.service.UserEditService;
 
 import java.net.URI;
