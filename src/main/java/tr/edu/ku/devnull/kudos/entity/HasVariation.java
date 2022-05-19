@@ -3,10 +3,9 @@ package tr.edu.ku.devnull.kudos.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+@Entity
 @Table(name = "has_variation", schema = "public")
 @Data
 @NoArgsConstructor

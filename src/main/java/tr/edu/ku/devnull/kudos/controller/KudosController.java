@@ -22,11 +22,12 @@ public class KudosController {
         this.kudosService = kudosService;
     }
 
-    @PostMapping(value = "/user/send-kudos/{sender-username}/{recipient-username}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/user/send-kudos/{sender-username}/{recipient-username}/{kudos-variation}")
     public ResponseEntity<?> sendKudos(@PathVariable("sender-username") String senderUsername,
-                                       @PathVariable("recipient-username") String recipientUsername) {
+                                       @PathVariable("recipient-username") String recipientUsername,
+                                       @PathVariable("kudos-variation") String kudosVariation) {
 
-        if (!kudosService.sendKudos(senderUsername, recipientUsername))
+        if (!kudosService.sendKudos(senderUsername, recipientUsername, kudosVariation))
             return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
 
         return ResponseEntity.ok(HttpStatus.OK);

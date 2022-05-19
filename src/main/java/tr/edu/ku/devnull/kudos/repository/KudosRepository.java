@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import tr.edu.ku.devnull.kudos.entity.Kudos;
+import tr.edu.ku.devnull.kudos.entity.KudosVariation;
 
 import java.util.List;
 
@@ -26,4 +27,7 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
 
     @Query(value = "SELECT * FROM kudos AS K WHERE K.sender_username = ?1 LIMIT 10", nativeQuery = true)
     List<Kudos> getSentKudosByUsernameAndLimit(String username, String limit);
+
+    @Query(value = "SELECT * FROM kudos AS K WHERE K.recipient_username = ?1 ORDER BY K.kudos_id DESC LIMIT 1", nativeQuery = true)
+    Kudos getLastReceivedKudos(String username);
 }

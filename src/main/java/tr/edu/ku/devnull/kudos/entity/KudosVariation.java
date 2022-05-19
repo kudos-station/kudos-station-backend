@@ -3,10 +3,7 @@ package tr.edu.ku.devnull.kudos.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "kudos_variation", schema = "public")
@@ -14,10 +11,11 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class KudosVariation {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "kudos_variation_id")
     private Long kudosVariationID;
 
     @Column(name = "kudos_variation_name")
-    private Long kudosVariationName;
+    private String kudosVariationName;
 }
 
