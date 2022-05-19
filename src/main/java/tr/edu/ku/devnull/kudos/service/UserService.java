@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import tr.edu.ku.devnull.kudos.dto.UserDto;
 import tr.edu.ku.devnull.kudos.entity.User;
 import tr.edu.ku.devnull.kudos.mapper.UserMapper;
 import tr.edu.ku.devnull.kudos.repository.AuthorityRepository;
+import tr.edu.ku.devnull.kudos.repository.DepartmentRepository;
 import tr.edu.ku.devnull.kudos.repository.UserRepository;
 import tr.edu.ku.devnull.kudos.response.UserProfileResponse;
-import tr.edu.ku.devnull.kudos.response.UserRoleResponse;
 
 import java.util.List;
 
@@ -20,38 +19,45 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
+    private final DepartmentRepository departmentRepository;
+
     private final UserMapper userMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, DepartmentRepository departmentRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
+        this.departmentRepository = departmentRepository;
         this.userMapper = userMapper;
-    }
-
-    public List<UserDto> getAllUsers() {
-        return userMapper.entityToDtoList(userRepository.getAllUsers());
     }
 
     public UserProfileResponse getProfile() {
         UserDetails u = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.getUserByUsername(u.getUsername());
-
-        return userMapper.entityToUserProfile(user);
-    }
-
-    public UserRoleResponse getCurrentUserWithAuthorities() {
-        UserDetails u = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.getUserByUsername(u.getUsername());
         String currentUserRole = authorityRepository.getRoleByUsername(u.getUsername());
 
-        UserRoleResponse userRoleResponse = userMapper.entityToUserRole(user);
-        userRoleResponse.setAuthorities(currentUserRole);
+        UserProfileResponse userProfileResponse = userMapper.entityToUserProfile(user);
+        String userDepartment = departmentRepository.getUsersDepartmentByUsername(u.getUsername());
+        List<String> userProjects = departmentRepository.getUsersProjectsByUsername(u.getUsername());
 
-        return userRoleResponse;
+        userProfileResponse.setAuthorities(currentUserRole);
+        userProfileResponse.setDepartment(userDepartment);
+        userProfileResponse.setProjects(userProjects);
+
+        return userProfileResponse;
     }
 
-    public UserProfileResponse getUser(String nickname) {
-        return userMapper.entityToUserProfile(userRepository.getUserByUsername(nickname));
+    public UserProfileResponse getUser(String username) {
+
+        UserProfileResponse userProfileResponse = userMapper.entityToUserProfile(userRepository.getUserByUsername(username));
+        String userDepartment = departmentRepository.getUsersDepartmentByUsername(username);
+        List<String> userProjects = departmentRepository.getUsersProjectsByUsername(username);
+        String currentUserRole = authorityRepository.getRoleByUsername(username);
+
+        userProfileResponse.setAuthorities(currentUserRole);
+        userProfileResponse.setDepartment(userDepartment);
+        userProfileResponse.setProjects(userProjects);
+
+        return userProfileResponse;
     }
 }

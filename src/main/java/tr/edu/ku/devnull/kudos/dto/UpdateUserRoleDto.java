@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UpdateUserRoleDto {
-    private String nickname;
+    private String username;
     private String authority;
 }
