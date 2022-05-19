@@ -9,6 +9,6 @@ public class UserRoleResponse {
     private String firstName;
     private String lastName;
     private String department;
-    private String nickname;
+    private String username;
     private String authorities;
 }

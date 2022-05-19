@@ -18,12 +18,9 @@ public class UserEditController {
 
     private final UserEditService userEditService;
 
-    private final UserMapper userMapper;
-
     @Autowired
-    public UserEditController(UserEditService userEditService, UserMapper userMapper) {
+    public UserEditController(UserEditService userEditService) {
         this.userEditService = userEditService;
-        this.userMapper = userMapper;
     }
 
     @PostMapping(value = "/admin/create-user", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -31,7 +28,7 @@ public class UserEditController {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         if (!userEditService.createUser(user)) return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
 
-        return ResponseEntity.created(URI.create("/user/" + user.getNickname())).body(HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("/user/" + user.getUsername())).body(HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/admin/update-user-role", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -42,9 +39,9 @@ public class UserEditController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/admin/delete-user/{nickname}")
-    public ResponseEntity<?> deleteUser(@PathVariable("nickname") String nickname) {
-        if (!userEditService.deleteUser(nickname)) return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+    @DeleteMapping(value = "/admin/delete-user/{username}")
+    public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
+        if (!userEditService.deleteUser(username)) return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
 
         return ResponseEntity.ok(HttpStatus.OK);
     }

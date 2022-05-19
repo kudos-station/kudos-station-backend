@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import tr.edu.ku.devnull.kudos.dto.KudosDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import tr.edu.ku.devnull.kudos.mapper.UserMapper;
 import tr.edu.ku.devnull.kudos.response.KudosResponse;
 import tr.edu.ku.devnull.kudos.service.KudosService;
@@ -16,20 +18,16 @@ import java.util.List;
 public class KudosController {
     private final KudosService kudosService;
 
-    private final UserMapper userMapper;
-
     @Autowired
-    public KudosController(KudosService kudosService, UserMapper userMapper) {
+    public KudosController(KudosService kudosService) {
         this.kudosService = kudosService;
-        this.userMapper = userMapper;
     }
 
-    @PostMapping(value = "/user/send-kudos/{sender-nickname}/{recipient-nickname}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> sendKudos(@PathVariable("sender-nickname") String sender,
-                                       @PathVariable("recipient-nickname") String recipient,
-                                       @RequestBody KudosDto kudosDto) {
+    @PostMapping(value = "/user/send-kudos/{sender-username}/{recipient-username}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> sendKudos(@PathVariable("sender-username") String senderUsername,
+                                       @PathVariable("recipient-username") String recipientUsername) {
 
-        if (!kudosService.sendKudos(sender, recipient, kudosDto))
+        if (!kudosService.sendKudos(senderUsername, recipientUsername))
             return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
 
         return ResponseEntity.ok(HttpStatus.OK);
@@ -40,15 +38,15 @@ public class KudosController {
         return new ResponseEntity<>(kudosService.getRecentKudos(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user/received/{nickname}/{limit}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<KudosResponse>> getReceivedKudosByNicknameAndLimit(@PathVariable("nickname") String nickname,
+    @GetMapping(value = "/user/received/{username}/{limit}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<KudosResponse>> getReceivedKudosByUsernameAndLimit(@PathVariable("username") String username,
                                                                                   @PathVariable("limit") String limit) {
-        return new ResponseEntity<>(kudosService.getReceivedKudosByNicknameAndLimit(nickname, limit), HttpStatus.OK);
+        return new ResponseEntity<>(kudosService.getReceivedKudosByUsernameAndLimit(username, limit), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user/sent/{nickname}/{limit}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<KudosResponse>> getSentKudosByNicknameAndLimit(@PathVariable("nickname") String nickname,
+    @GetMapping(value = "/user/sent/{username}/{limit}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<KudosResponse>> getSentKudosByUsernameAndLimit(@PathVariable("username") String username,
                                                                               @PathVariable("limit") String limit) {
-        return new ResponseEntity<>(kudosService.getSentKudosByNicknameAndLimit(nickname, limit), HttpStatus.OK);
+        return new ResponseEntity<>(kudosService.getSentKudosByUsernameAndLimit(username, limit), HttpStatus.OK);
     }
 }

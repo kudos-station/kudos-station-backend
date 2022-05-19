@@ -9,15 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "authority", schema = "public")
+@Table(name = "kudos_type", schema = "public")
 @Data
 @NoArgsConstructor
-public class Authority {
-
+public class KudosType {
     @Id
-    @Column(name = "username")
-    private String username;
+    @Column(name = "kudos_id")
+    private Long kudosID;
 
-    @Column(name = "authority", nullable = false)
-    private String authority;
+    @Column(name = "kudos_type")
+    private Long kudosType;
 }
+
