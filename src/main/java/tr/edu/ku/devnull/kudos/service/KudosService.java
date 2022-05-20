@@ -9,8 +9,10 @@ import tr.edu.ku.devnull.kudos.repository.HasVariationRepository;
 import tr.edu.ku.devnull.kudos.repository.KudosRepository;
 import tr.edu.ku.devnull.kudos.repository.KudosVariationRepository;
 import tr.edu.ku.devnull.kudos.response.KudosResponse;
+import tr.edu.ku.devnull.kudos.response.KudosVariationResponse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class KudosService {
@@ -61,5 +63,16 @@ public class KudosService {
 
     public List<KudosResponse> getSentKudosByUsernameAndLimit(String username, String limit) {
         return kudosMapper.entityListToResponseList(kudosRepository.getSentKudosByUsernameAndLimit(username, limit));
+    }
+
+    public KudosVariationResponse getKudosVariations() {
+        List<KudosVariation> kudosVariations = kudosVariationRepository.getKudosVariations();
+        return KudosVariationResponse.builder()
+                .kudosVariations(
+                        kudosVariations
+                                .stream()
+                                .map(KudosVariation::getKudosVariationName)
+                                .collect(Collectors.toList()))
+                .build();
     }
 }

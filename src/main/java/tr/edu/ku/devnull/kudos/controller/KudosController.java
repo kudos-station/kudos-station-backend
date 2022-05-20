@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tr.edu.ku.devnull.kudos.response.KudosResponse;
+import tr.edu.ku.devnull.kudos.response.KudosVariationResponse;
 import tr.edu.ku.devnull.kudos.service.KudosService;
 
 import java.util.List;
@@ -38,15 +39,20 @@ public class KudosController {
         return new ResponseEntity<>(kudosService.getRecentKudos(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user/received/{username}/{limit}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/user/get-kudos/received/{username}/{limit}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<KudosResponse>> getReceivedKudosByUsernameAndLimit(@PathVariable("username") String username,
                                                                                   @PathVariable("limit") String limit) {
         return new ResponseEntity<>(kudosService.getReceivedKudosByUsernameAndLimit(username, limit), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user/sent/{username}/{limit}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/user/get-kudos/sent/{username}/{limit}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<KudosResponse>> getSentKudosByUsernameAndLimit(@PathVariable("username") String username,
                                                                               @PathVariable("limit") String limit) {
         return new ResponseEntity<>(kudosService.getSentKudosByUsernameAndLimit(username, limit), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/kudos-variations")
+    public ResponseEntity<KudosVariationResponse> getKudosVariations() {
+        return new ResponseEntity<>(kudosService.getKudosVariations(), HttpStatus.OK);
     }
 }
