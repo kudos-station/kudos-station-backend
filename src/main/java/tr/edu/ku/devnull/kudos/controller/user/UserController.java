@@ -29,12 +29,12 @@ public class UserController {
         return userService.getUser(username);
     }
 
-    @PostMapping(value = "/user/department", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/user/departments-by-name", consumes = MediaType.APPLICATION_JSON_VALUE)
     public UsernameListResponse getUsersByDepartmentName(@RequestBody DepartmentDto departmentDto) {
         return userService.getUsersByDepartmentName(departmentDto.getDepartmentName());
     }
 
-    @PostMapping(value = "/user/project", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/user/projects-by-name", consumes = MediaType.APPLICATION_JSON_VALUE)
     public UsernameListResponse getUsersByProjectName(@RequestBody ProjectDto projectDto) {
         return userService.getUsersByProjectName(projectDto.getProjectName());
     }

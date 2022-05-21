@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tr.edu.ku.devnull.kudos.response.util.DepartmentIDResponse;
 import tr.edu.ku.devnull.kudos.response.util.DepartmentNameResponse;
@@ -33,7 +34,7 @@ public class DepartmentController {
         return new ResponseEntity<>(departmentService.getDepartmentIDByName(departmentName), HttpStatus.OK);
     }
 
-    @GetMapping("/admin/project/create-department/{department-name}/{manager-id}")
+    @PostMapping("/admin/project/create-department/{department-name}/{manager-id}")
     public ResponseEntity<?> createProject(@PathVariable("department-name") String departmentName,
                                            @PathVariable("manager-id") Integer managerID) {
 
