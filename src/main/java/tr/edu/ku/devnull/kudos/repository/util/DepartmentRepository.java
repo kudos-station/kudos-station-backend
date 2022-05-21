@@ -1,8 +1,10 @@
 package tr.edu.ku.devnull.kudos.repository.util;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import tr.edu.ku.devnull.kudos.entity.util.Department;
 
 import java.util.List;
@@ -14,7 +16,14 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
             " WHERE WI.department_id = D.department_id AND U.user_id = WI.user_id AND U.username = ?1", nativeQuery = true)
     String getUsersDepartmentByUsername(String username);
 
-    @Query(value = "SELECT P.project_name FROM works_on AS WO, project AS P, \"user\" AS U" +
-            " WHERE WO.project_id = P.project_id AND U.user_id = WO.user_id AND U.username = ?1", nativeQuery = true)
-    List<String> getUsersProjectsByUsername(String username);
+    @Query(value = "SELECT D.department_name FROM department as D ", nativeQuery = true)
+    List<String> getAllDepartmentNames();
+
+    @Query(value = "SELECT D.department_id FROM department as D WHERE D.department_name = ?1 ", nativeQuery = true)
+    Integer getDepartmentIDByName(String departmentName);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "INSERT INTO department(department_name, manager_id) VALUES (?1, ?2)", nativeQuery = true)
+    int insertDepartment(String departmentName, Integer managerID);
 }

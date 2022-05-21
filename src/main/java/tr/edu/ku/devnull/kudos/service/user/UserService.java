@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 import tr.edu.ku.devnull.kudos.entity.user.User;
 import tr.edu.ku.devnull.kudos.mapper.user.UserMapper;
 import tr.edu.ku.devnull.kudos.repository.user.AuthorityRepository;
-import tr.edu.ku.devnull.kudos.repository.util.DepartmentRepository;
 import tr.edu.ku.devnull.kudos.repository.user.UserRepository;
+import tr.edu.ku.devnull.kudos.repository.util.DepartmentRepository;
+import tr.edu.ku.devnull.kudos.repository.util.ProjectRepository;
 import tr.edu.ku.devnull.kudos.response.user.UserProfileResponse;
 import tr.edu.ku.devnull.kudos.response.user.UsernameListResponse;
 
@@ -23,13 +24,16 @@ public class UserService {
 
     private final DepartmentRepository departmentRepository;
 
+    private final ProjectRepository projectRepository;
+
     private final UserMapper userMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, DepartmentRepository departmentRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository, DepartmentRepository departmentRepository, ProjectRepository projectRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.departmentRepository = departmentRepository;
+        this.projectRepository = projectRepository;
         this.userMapper = userMapper;
     }
 
@@ -40,7 +44,7 @@ public class UserService {
 
         UserProfileResponse userProfileResponse = userMapper.entityToUserProfile(user);
         String userDepartment = departmentRepository.getUsersDepartmentByUsername(u.getUsername());
-        List<String> userProjects = departmentRepository.getUsersProjectsByUsername(u.getUsername());
+        List<String> userProjects = projectRepository.getUsersProjectsByUsername(u.getUsername());
 
         userProfileResponse.setAuthorities(currentUserRole);
         userProfileResponse.setDepartment(userDepartment);
@@ -53,7 +57,7 @@ public class UserService {
 
         UserProfileResponse userProfileResponse = userMapper.entityToUserProfile(userRepository.getUserByUsername(username));
         String userDepartment = departmentRepository.getUsersDepartmentByUsername(username);
-        List<String> userProjects = departmentRepository.getUsersProjectsByUsername(username);
+        List<String> userProjects = projectRepository.getUsersProjectsByUsername(username);
         String currentUserRole = authorityRepository.getRoleByUsername(username);
 
         userProfileResponse.setAuthorities(currentUserRole);

@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import tr.edu.ku.devnull.kudos.entity.kudos.Kudos;
 import tr.edu.ku.devnull.kudos.entity.kudos.KudosVariation;
 import tr.edu.ku.devnull.kudos.mapper.kudos.KudosMapper;
-import tr.edu.ku.devnull.kudos.repository.relation.HasVariationRepository;
 import tr.edu.ku.devnull.kudos.repository.kudos.KudosRepository;
 import tr.edu.ku.devnull.kudos.repository.kudos.KudosVariationRepository;
+import tr.edu.ku.devnull.kudos.repository.relation.HasVariationRepository;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosResponse;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosVariationResponse;
 
