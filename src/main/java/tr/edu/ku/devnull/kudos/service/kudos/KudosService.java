@@ -65,14 +65,14 @@ public class KudosService {
     }
 
     public List<KudosResponse> getReceivedKudosByUsernameAndLimit(String username, String limit) {
-        List<Kudos> kudosResultSet = kudosRepository.getReceivedKudosByUsernameAndLimit(username, limit);
+        List<Kudos> kudosResultSet = kudosRepository.getReceivedKudosByUsernameAndLimit(username, Integer.valueOf(limit));
         List<KudosIdentifierDto> kudosIdentifierDto = extractKudosData(kudosResultSet);
 
         return kudosMapper.identifierToResponse(kudosIdentifierDto);
     }
 
     public List<KudosResponse> getSentKudosByUsernameAndLimit(String username, String limit) {
-        List<Kudos> kudosResultSet = kudosRepository.getSentKudosByUsernameAndLimit(username, limit);
+        List<Kudos> kudosResultSet = kudosRepository.getSentKudosByUsernameAndLimit(username, Integer.valueOf(limit));
         List<KudosIdentifierDto> kudosIdentifierDto = extractKudosData(kudosResultSet);
 
         return kudosMapper.identifierToResponse(kudosIdentifierDto);
