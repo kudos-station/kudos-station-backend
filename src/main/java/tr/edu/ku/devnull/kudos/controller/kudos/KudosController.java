@@ -39,13 +39,13 @@ public class KudosController {
         return new ResponseEntity<>(kudosService.getRecentKudos(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user/kudos/received/{username}/{limit}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/user/kudos/received/{username}/{limit}")
     public ResponseEntity<List<KudosResponse>> getReceivedKudosByUsernameAndLimit(@PathVariable("username") String username,
                                                                                   @PathVariable("limit") String limit) {
         return new ResponseEntity<>(kudosService.getReceivedKudosByUsernameAndLimit(username, limit), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/user/kudos/sent/{username}/{limit}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/user/kudos/sent/{username}/{limit}")
     public ResponseEntity<List<KudosResponse>> getSentKudosByUsernameAndLimit(@PathVariable("username") String username,
                                                                               @PathVariable("limit") String limit) {
         return new ResponseEntity<>(kudosService.getSentKudosByUsernameAndLimit(username, limit), HttpStatus.OK);

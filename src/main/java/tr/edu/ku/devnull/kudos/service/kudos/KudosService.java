@@ -39,6 +39,8 @@ public class KudosService {
 
     public boolean sendKudos(String sender, String recipient, String kudosVariation) {
 
+        if (sender.equalsIgnoreCase(recipient)) return false;
+
         int status = kudosRepository.insertKudos(sender, recipient);
 
         if (status == IS_SUCCESSFUL) {
@@ -56,6 +58,37 @@ public class KudosService {
 
     public List<KudosResponse> getRecentKudos() {
         List<Kudos> kudosResultSet = kudosRepository.getRecentKudos();
+        List<KudosIdentifierDto> kudosIdentifierDto = extractKudosData(kudosResultSet);
+
+        return kudosMapper.identifierToResponse(kudosIdentifierDto);
+    }
+
+    public List<KudosResponse> getReceivedKudosByUsernameAndLimit(String username, String limit) {
+        List<Kudos> kudosResultSet = kudosRepository.getReceivedKudosByUsernameAndLimit(username, limit);
+        List<KudosIdentifierDto> kudosIdentifierDto = extractKudosData(kudosResultSet);
+
+        return kudosMapper.identifierToResponse(kudosIdentifierDto);
+    }
+
+    public List<KudosResponse> getSentKudosByUsernameAndLimit(String username, String limit) {
+        List<Kudos> kudosResultSet = kudosRepository.getSentKudosByUsernameAndLimit(username, limit);
+        List<KudosIdentifierDto> kudosIdentifierDto = extractKudosData(kudosResultSet);
+
+        return kudosMapper.identifierToResponse(kudosIdentifierDto);
+    }
+
+    public KudosVariationResponse getKudosVariations() {
+        List<KudosVariation> kudosVariations = kudosVariationRepository.getKudosVariations();
+        return KudosVariationResponse.builder()
+                .kudosVariations(
+                        kudosVariations
+                                .stream()
+                                .map(KudosVariation::getKudosVariationName)
+                                .collect(Collectors.toList()))
+                .build();
+    }
+
+    private List<KudosIdentifierDto> extractKudosData(List<Kudos> kudosResultSet) {
         List<Object[]> variationResultSet = hasVariationRepository.getKudosVariationsOfIDs();
         List<KudosIdentifierDto> kudosIdentifierDto = kudosMapper.entityToIdentifierDto(kudosResultSet);
 
@@ -68,25 +101,6 @@ public class KudosService {
             }
         }
 
-        return kudosMapper.identifierToResponse(kudosIdentifierDto);
-    }
-
-    public List<KudosResponse> getReceivedKudosByUsernameAndLimit(String username, String limit) {
-        return kudosMapper.entityListToResponseList(kudosRepository.getReceivedKudosByUsernameAndLimit(username, limit));
-    }
-
-    public List<KudosResponse> getSentKudosByUsernameAndLimit(String username, String limit) {
-        return kudosMapper.entityListToResponseList(kudosRepository.getSentKudosByUsernameAndLimit(username, limit));
-    }
-
-    public KudosVariationResponse getKudosVariations() {
-        List<KudosVariation> kudosVariations = kudosVariationRepository.getKudosVariations();
-        return KudosVariationResponse.builder()
-                .kudosVariations(
-                        kudosVariations
-                                .stream()
-                                .map(KudosVariation::getKudosVariationName)
-                                .collect(Collectors.toList()))
-                .build();
+        return kudosIdentifierDto;
     }
 }
