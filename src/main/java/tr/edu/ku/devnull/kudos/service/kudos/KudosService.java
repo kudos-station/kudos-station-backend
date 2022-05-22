@@ -2,6 +2,7 @@ package tr.edu.ku.devnull.kudos.service.kudos;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tr.edu.ku.devnull.kudos.dto.kudos.KudosIdentifierDto;
 import tr.edu.ku.devnull.kudos.entity.kudos.Kudos;
 import tr.edu.ku.devnull.kudos.entity.kudos.KudosVariation;
 import tr.edu.ku.devnull.kudos.mapper.kudos.KudosMapper;
@@ -54,7 +55,20 @@ public class KudosService {
     }
 
     public List<KudosResponse> getRecentKudos() {
-        return kudosMapper.entityListToResponseList(kudosRepository.getRecentKudos());
+        List<Kudos> kudosResultSet = kudosRepository.getRecentKudos();
+        List<Object[]> variationResultSet = hasVariationRepository.getKudosVariationsOfIDs();
+        List<KudosIdentifierDto> kudosIdentifierDto = kudosMapper.entityToIdentifierDto(kudosResultSet);
+
+
+        for (KudosIdentifierDto d : kudosIdentifierDto) {
+            for (Object[] o : variationResultSet) {
+                if (d.getKudosID().equals((Integer) o[0])) {
+                    d.setVariation((String) o[1]);
+                }
+            }
+        }
+
+        return kudosMapper.identifierToResponse(kudosIdentifierDto);
     }
 
     public List<KudosResponse> getReceivedKudosByUsernameAndLimit(String username, String limit) {

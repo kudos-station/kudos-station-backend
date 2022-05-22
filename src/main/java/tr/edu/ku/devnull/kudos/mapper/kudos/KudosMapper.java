@@ -3,6 +3,7 @@ package tr.edu.ku.devnull.kudos.mapper.kudos;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
+import tr.edu.ku.devnull.kudos.dto.kudos.KudosIdentifierDto;
 import tr.edu.ku.devnull.kudos.entity.kudos.Kudos;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosResponse;
 
@@ -16,4 +17,8 @@ public interface KudosMapper {
     KudosResponse entityToResponse(Kudos user);
 
     List<KudosResponse> entityListToResponseList(List<Kudos> user);
+
+    List<KudosResponse> identifierToResponse(List<KudosIdentifierDto> kudosIdentifierResponses);
+
+    List<KudosIdentifierDto> entityToIdentifierDto(List<Kudos> kudosIdentifierResponses);
 }
