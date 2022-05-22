@@ -4,12 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import tr.edu.ku.devnull.kudos.dto.util.DepartmentDto;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosResponse;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosVariationResponse;
+import tr.edu.ku.devnull.kudos.response.user.UsernameListResponse;
 import tr.edu.ku.devnull.kudos.service.kudos.KudosService;
 
 import java.util.List;
@@ -54,5 +53,12 @@ public class KudosController {
     @GetMapping("/user/kudos-variations")
     public ResponseEntity<KudosVariationResponse> getKudosVariations() {
         return new ResponseEntity<>(kudosService.getKudosVariations(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/user/kudos/received-all-variations/from-department/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UsernameListResponse> getUsersWhoWorksInGivenDepartmentAndGotAllKudosVariations(
+            @RequestBody DepartmentDto departmentDto) {
+
+        return new ResponseEntity<>(kudosService.getUsersWhoWorksInGivenDepartmentAndGotAllKudosVariations(departmentDto.getDepartmentName()), HttpStatus.OK);
     }
 }

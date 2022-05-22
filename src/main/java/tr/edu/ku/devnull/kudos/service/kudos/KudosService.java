@@ -11,6 +11,7 @@ import tr.edu.ku.devnull.kudos.repository.kudos.KudosVariationRepository;
 import tr.edu.ku.devnull.kudos.repository.relation.HasVariationRepository;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosResponse;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosVariationResponse;
+import tr.edu.ku.devnull.kudos.response.user.UsernameListResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,6 +86,12 @@ public class KudosService {
                                 .stream()
                                 .map(KudosVariation::getKudosVariationName)
                                 .collect(Collectors.toList()))
+                .build();
+    }
+
+    public UsernameListResponse getUsersWhoWorksInGivenDepartmentAndGotAllKudosVariations(String departmentName) {
+        return UsernameListResponse.builder()
+                .usernames(kudosRepository.getUsersWhoWorksInGivenDepartmentAndGotAllKudosVariations(departmentName))
                 .build();
     }
 
