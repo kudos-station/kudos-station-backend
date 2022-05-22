@@ -18,7 +18,7 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
             " (NOW(), ?1, ?2)", nativeQuery = true)
     int insertKudos(String senderUsername, String recipientUsername);
 
-    @Query(value = "SELECT * FROM kudos LIMIT 10", nativeQuery = true)
+    @Query(value = "SELECT * FROM kudos ORDER BY created_at DESC LIMIT 10", nativeQuery = true)
     List<Kudos> getRecentKudos();
 
     @Query(value = "SELECT * FROM kudos AS K WHERE K.recipient_username = ?1 LIMIT 10", nativeQuery = true)
