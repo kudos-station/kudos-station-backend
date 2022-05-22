@@ -61,4 +61,11 @@ public class KudosController {
 
         return new ResponseEntity<>(kudosService.getUsersWhoWorksInGivenDepartmentAndGotAllKudosVariations(departmentDto.getDepartmentName()), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/user/kudos/works-in-all-projects/from-department/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<KudosResponse>> getKudosFromUsersThatWorkInAllProjectsInGivenDepartment(
+            @RequestBody DepartmentDto departmentDto) {
+
+        return new ResponseEntity<>(kudosService.getKudosFromUsersThatWorkInAllProjectsInGivenDepartment(departmentDto.getDepartmentName()), HttpStatus.OK);
+    }
 }
