@@ -96,7 +96,10 @@ public class KudosService {
     }
 
     public List<KudosResponse> getKudosFromUsersThatWorkInAllProjectsInGivenDepartment(String departmentName) {
-        return kudosMapper.entityListToResponseList(kudosRepository.getKudosFromUsersThatWorkInAllProjectsInGivenDepartment(departmentName));
+        List<Kudos> kudosResultSet = kudosRepository.getKudosFromUsersThatWorkInAllProjectsInGivenDepartment(departmentName);
+        List<KudosIdentifierDto> kudosIdentifierDto = extractKudosData(kudosResultSet);
+
+        return kudosMapper.identifierToResponse(kudosIdentifierDto);
     }
 
     private List<KudosIdentifierDto> extractKudosData(List<Kudos> kudosResultSet) {
