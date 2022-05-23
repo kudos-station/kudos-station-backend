@@ -51,7 +51,8 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
                       WHERE K.kudos_id = HV.kudos_id
                         AND KV.kudos_variation_id = HV.kudos_variation_id
                       GROUP BY K.recipient_username) AS kudos_data_of_users
-                WHERE kudos_data_of_users.total_count = (SELECT COUNT(DISTINCT KV.kudos_variation_id) FROM kudos_variation AS KV))""", nativeQuery = true)
+                WHERE kudos_data_of_users.total_count = (SELECT COUNT(DISTINCT KV.kudos_variation_id) FROM kudos_variation AS KV))
+            LIMIT 3""", nativeQuery = true)
     List<String> getUsersWhoWorksInGivenDepartmentAndGotAllKudosVariations(String departmentName);
 
     @Query(value = """
@@ -60,7 +61,7 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
             WHERE k.recipient_username = (SELECT u.username
                                           FROM "user" AS u,
                                                department AS d
-                                          WHERE d.department_name = 'Kudos Station R&D'
+                                          WHERE d.department_name = ?1
                                             AND NOT EXISTS(SELECT p.project_id
                                                            FROM project AS p
                                                            WHERE p.department_id = d.department_id
@@ -69,6 +70,6 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
                                                             FROM works_on AS wo
                                                             WHERE u.user_id = wo.user_id)))
             ORDER BY created_at DESC
-            LIMIT 5""", nativeQuery = true)
+            LIMIT 3""", nativeQuery = true)
     List<Kudos> getKudosFromUsersThatWorkInAllProjectsInGivenDepartment(String departmentName);
 }
