@@ -38,7 +38,7 @@ public class UserEditController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/admin/delete-user/{username}")
+    @PostMapping(value = "/admin/delete-user/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
         if (!userEditService.deleteUser(username)) return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
 
