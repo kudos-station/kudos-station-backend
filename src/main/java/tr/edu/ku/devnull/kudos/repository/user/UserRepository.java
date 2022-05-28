@@ -36,4 +36,57 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "DELETE FROM \"user\" WHERE username = ?1", nativeQuery = true)
     int deleteUserByUsername(String username);
+
+    // Irmak's Query.
+    @Query(value = """
+            WITH user_and_count
+                     AS (SELECT kudos.recipient_username AS username, COUNT(*) AS n_kudos
+                         FROM kudos
+                         WHERE kudos.kudos_id IN (SELECT H.kudos_id
+                                                  FROM has_variation AS H,
+                                                       kudos_variation AS K
+                                                  WHERE K.kudos_variation_name = ?1
+                                                    AND H.kudos_variation_id = K.kudos_variation_id)
+                         GROUP BY kudos.recipient_username
+                )
+            SELECT u.username AS username, p.project_name AS project
+            FROM "user" AS u,
+                 project AS p,
+                 works_on AS w
+            WHERE u.user_id = w.user_id
+              AND w.project_id = p.project_id
+              AND u.username = (SELECT username FROM user_and_count WHERE n_kudos = (SELECT MAX(n_kudos) FROM user_and_count))
+            LIMIT 1""", nativeQuery = true)
+    List<Object[]> getUserWhoGotMostOfGivenKudosVariationAndItsCurrentProject(String kudosVariationName);
+
+    @Query(value = """
+            WITH usernames AS
+                     (
+                         SELECT DISTINCT a.username
+                         FROM (SELECT u.username AS username
+                               FROM "user" AS u
+                               WHERE NOT EXISTS(SELECT DISTINCT K.kudos_variation_name
+                                                FROM kudos_variation AS K
+                                                WHERE K.kudos_variation_name NOT IN (SELECT DISTINCT K1.kudos_variation_name
+                                                                                     FROM kudos,
+                                                                                          kudos_variation AS K1,
+                                                                                          has_variation AS H
+                                                                                     WHERE kudos.recipient_username = u.username
+                                                                                       AND kudos.kudos_id = H.kudos_id
+                                                                                       AND H.kudos_variation_id = K1.kudos_variation_id))
+                              ) AS a
+                                  INNER JOIN
+                                  (SELECT kudos.sender_username AS username FROM kudos) AS b
+                                  ON a.username = b.username
+                     )
+            SELECT u1.username, u1.first_name, u1.last_name
+            FROM "user" AS u1,
+                 project AS p,
+                 works_on AS w
+            WHERE u1.user_id = w.user_id
+              AND w.project_id = p.project_id
+              AND p.project_name = ?1
+              AND u1.username IN (SELECT DISTINCT username FROM usernames)
+            LIMIT 1""", nativeQuery = true)
+    List<Object[]> getUserWhoWorksInGivenProjectAndReceivedAllKudosVariationsAndSentAnyKudos(String projectName);
 }

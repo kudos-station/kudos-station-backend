@@ -10,7 +10,9 @@ import tr.edu.ku.devnull.kudos.repository.user.AuthorityRepository;
 import tr.edu.ku.devnull.kudos.repository.user.UserRepository;
 import tr.edu.ku.devnull.kudos.repository.util.DepartmentRepository;
 import tr.edu.ku.devnull.kudos.repository.util.ProjectRepository;
+import tr.edu.ku.devnull.kudos.response.user.UserIdentifierResponse;
 import tr.edu.ku.devnull.kudos.response.user.UserProfileResponse;
+import tr.edu.ku.devnull.kudos.response.user.UsernameAndProjectResponse;
 import tr.edu.ku.devnull.kudos.response.user.UsernameListResponse;
 
 import java.util.List;
@@ -82,6 +84,27 @@ public class UserService {
                         .stream()
                         .map(User::getUsername)
                         .collect(Collectors.toList()))
+                .build();
+    }
+
+    public UsernameAndProjectResponse getUserWhoGotMostOfGivenKudosVariationAndItsCurrentProject(String kudosVariationName) {
+        List<Object[]> resultSet = userRepository
+                .getUserWhoGotMostOfGivenKudosVariationAndItsCurrentProject(kudosVariationName);
+
+        return UsernameAndProjectResponse.builder()
+                .username((String) resultSet.get(0)[0])
+                .project((String) resultSet.get(0)[1])
+                .build();
+    }
+
+    public UserIdentifierResponse getUserWhoWorksInGivenProjectAndReceivedAllKudosVariationsAndSentAnyKudos(String projectName) {
+        List<Object[]> resultSet = userRepository
+                .getUserWhoWorksInGivenProjectAndReceivedAllKudosVariationsAndSentAnyKudos(projectName);
+
+        return UserIdentifierResponse.builder()
+                .username((String) resultSet.get(0)[0])
+                .firstName((String) resultSet.get(0)[1])
+                .lastName((String) resultSet.get(0)[2])
                 .build();
     }
 }

@@ -1,6 +1,5 @@
 package tr.edu.ku.devnull.kudos.response.kudos;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Timestamp;

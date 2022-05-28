@@ -30,6 +30,7 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
     @Query(value = "SELECT * FROM kudos AS K WHERE K.recipient_username = ?1 ORDER BY K.kudos_id DESC LIMIT 1", nativeQuery = true)
     Kudos getLastReceivedKudos(String username);
 
+    // Kaan's Query.
     @Query(value = """
             SELECT U.username
             FROM "user" AS U
@@ -55,6 +56,7 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
             LIMIT 3""", nativeQuery = true)
     List<String> getUsersWhoWorksInGivenDepartmentAndGotAllKudosVariations(String departmentName);
 
+    // Can's Query.
     @Query(value = """
             SELECT *
             FROM kudos AS k
