@@ -27,8 +27,9 @@ public class KudosController {
                                        @PathVariable("recipient-username") String recipientUsername,
                                        @PathVariable("kudos-variation") String kudosVariation) {
 
-        if (!kudosService.sendKudos(senderUsername, recipientUsername, kudosVariation))
+        if (!kudosService.sendKudos(senderUsername, recipientUsername, kudosVariation)) {
             return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        }
 
         return ResponseEntity.ok(HttpStatus.OK);
     }

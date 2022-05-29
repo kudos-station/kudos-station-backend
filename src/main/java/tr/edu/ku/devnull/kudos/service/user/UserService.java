@@ -69,6 +69,10 @@ public class UserService {
         return userProfileResponse;
     }
 
+    public Integer getUserIdByUsername(String username) {
+        return userRepository.getUserIdByUsername(username);
+    }
+
     public UsernameListResponse getUsersByProjectName(String projectName) {
         return UsernameListResponse.builder()
                 .usernames(userRepository.getUsersByProjectName(projectName)

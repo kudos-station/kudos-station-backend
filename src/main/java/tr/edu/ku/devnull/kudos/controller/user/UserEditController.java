@@ -28,22 +28,28 @@ public class UserEditController {
     @PostMapping(value = "/admin/create-user", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody CreateUserDto user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        if (!userEditService.createUser(user)) return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        if (!userEditService.createUser(user)) {
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        }
 
         return ResponseEntity.created(URI.create("/user/" + user.getUsername())).body(HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/admin/update-user-role", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateUserRole(@RequestBody UpdateUserRoleDto updateUserRoleDto) {
-        if (!userEditService.updateUserRole(updateUserRoleDto))
+
+        if (!userEditService.updateUserRole(updateUserRoleDto)) {
             return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        }
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping(value = "/admin/delete-user/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
-        if (!userEditService.deleteUser(username)) return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        if (!userEditService.deleteUser(username)) {
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        }
 
         return ResponseEntity.ok(HttpStatus.OK);
     }

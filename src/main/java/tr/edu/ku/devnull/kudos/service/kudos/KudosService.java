@@ -40,12 +40,15 @@ public class KudosService {
 
     public boolean sendKudos(String sender, String recipient, String kudosVariation) {
 
-        if (sender.equalsIgnoreCase(recipient)) return false;
+        if (sender.equalsIgnoreCase(recipient)) {
+            return false;
+        }
 
         int status = kudosRepository.insertKudos(sender, recipient);
 
         if (status == IS_SUCCESSFUL) {
             Kudos lastKudos = kudosRepository.getLastReceivedKudos(recipient);
+
             if (lastKudos != null) {
                 KudosVariation kudosVar = kudosVariationRepository.getKudosVariation(kudosVariation);
                 return hasVariationRepository.insertHasVariation(lastKudos.getKudosID(), kudosVar.getKudosVariationID()) == IS_SUCCESSFUL;
@@ -65,6 +68,11 @@ public class KudosService {
     }
 
     public List<KudosResponse> getReceivedKudosByUsernameAndLimit(String username, String limit) {
+
+        if (Integer.parseInt(limit) > 5) {
+            limit = "5";
+        }
+
         List<Kudos> kudosResultSet = kudosRepository.getReceivedKudosByUsernameAndLimit(username, Integer.valueOf(limit));
         List<KudosIdentifierDto> kudosIdentifierDto = extractKudosData(kudosResultSet);
 
@@ -72,6 +80,11 @@ public class KudosService {
     }
 
     public List<KudosResponse> getSentKudosByUsernameAndLimit(String username, String limit) {
+
+        if (Integer.parseInt(limit) > 5) {
+            limit = "5";
+        }
+
         List<Kudos> kudosResultSet = kudosRepository.getSentKudosByUsernameAndLimit(username, Integer.valueOf(limit));
         List<KudosIdentifierDto> kudosIdentifierDto = extractKudosData(kudosResultSet);
 

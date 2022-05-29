@@ -17,6 +17,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM \"user\" as U WHERE U.username = ?1", nativeQuery = true)
     User getUserByUsername(String username);
 
+    @Query(value = "SELECT U.user_id FROM \"user\" as U WHERE U.username = ?1", nativeQuery = true)
+    Integer getUserIdByUsername(String username);
+
     @Query(value = "SELECT * FROM works_on AS WO, project AS P, \"user\" AS U" +
             " WHERE WO.project_id = P.project_id AND U.user_id = WO.user_id AND P.project_name = ?1", nativeQuery = true)
     List<User> getUsersByProjectName(String projectName);
