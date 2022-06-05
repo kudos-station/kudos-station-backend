@@ -30,8 +30,4 @@ public class WorksInService {
 
         return worksInRepository.insertToWorksIn(userID, departmentID) == IS_SUCCESSFUL;
     }
-
-    public boolean insertToWorksInTest(Integer userID, Integer departmentID) {
-        return worksInRepository.insertToWorksIn(userID, departmentID) == IS_SUCCESSFUL;
-    }
 }

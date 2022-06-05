@@ -36,8 +36,4 @@ public class WorksOnService {
 
         return worksOnRepository.insertToWorksOn(userID, departmentID, projectID, worksOnDto.getWorkHours()) == IS_SUCCESSFUL;
     }
-
-    public boolean insertToWorksOnTest(Integer userID, Integer departmentID, Integer projectID, Integer workHours) {
-        return worksOnRepository.insertToWorksOn(userID, departmentID, projectID, workHours) == IS_SUCCESSFUL;
-    }
 }
