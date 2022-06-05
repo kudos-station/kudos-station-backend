@@ -12,6 +12,6 @@ public class UserProfileResponse {
     private String lastName;
     private String username;
     private String authorities;
-    private String department;
+    private List<String> department;
     private List<String> projects;
 }

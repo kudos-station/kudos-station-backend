@@ -74,4 +74,24 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
             ORDER BY created_at DESC
             LIMIT 3""", nativeQuery = true)
     List<Kudos> getKudosFromUsersThatWorkInAllProjectsInGivenDepartment(String departmentName);
+
+    // Omer's Query.
+    @Query(value = """
+            SELECT u.username
+            FROM "user" AS u,
+                 kudos AS k,
+                 has_variation AS hv,
+                 kudos_variation AS kv
+            WHERE u.username = k.sender_username
+              AND k.kudos_id = hv.kudos_id
+              AND hv.kudos_variation_id = kv.kudos_variation_id
+              AND kv.kudos_variation_name = ?1
+              AND u.username NOT IN (SELECT u2.sender_username
+                                     FROM kudos AS u2
+                                     GROUP BY u2.sender_username
+                                     HAVING COUNT(*) < 10)
+            GROUP BY u.username
+            HAVING COUNT(*) > 2
+            LIMIT 3""", nativeQuery = true)
+    List<Object[]> getUsersWhoSentAmountOfKudosButDidNotHasAmountOfKudos(String kudosVariation);
 }

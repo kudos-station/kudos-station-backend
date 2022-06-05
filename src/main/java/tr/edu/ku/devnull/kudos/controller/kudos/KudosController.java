@@ -56,14 +56,19 @@ public class KudosController {
         return new ResponseEntity<>(kudosService.getKudosVariations(), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/user/kudos/received-all-variations/from-department/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/user/kudos/kudos-variation/{kudos-variation-name}/given-range")
+    public ResponseEntity<UsernameListResponse> getUsersWhoSentAmountOfKudosButDidNotHasAmountOfKudos(@PathVariable("kudos-variation-name") String kudosVariationName) {
+        return new ResponseEntity<>(kudosService.getUsersWhoSentAmountOfKudosButDidNotHasAmountOfKudos(kudosVariationName), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/user/kudos/received-all-variations/from-department", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UsernameListResponse> getUsersWhoWorksInGivenDepartmentAndGotAllKudosVariations(
             @RequestBody DepartmentDto departmentDto) {
 
         return new ResponseEntity<>(kudosService.getUsersWhoWorksInGivenDepartmentAndGotAllKudosVariations(departmentDto.getDepartmentName()), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/user/kudos/works-in-all-projects/from-department/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/user/kudos/works-in-all-projects/from-department", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<KudosResponse>> getKudosFromUsersThatWorkInAllProjectsInGivenDepartment(
             @RequestBody DepartmentDto departmentDto) {
 

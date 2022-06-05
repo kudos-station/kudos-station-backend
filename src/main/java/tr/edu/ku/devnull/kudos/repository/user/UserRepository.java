@@ -58,10 +58,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
                  works_on AS w
             WHERE u.user_id = w.user_id
               AND w.project_id = p.project_id
-              AND u.username = (SELECT username FROM user_and_count WHERE n_kudos = (SELECT MAX(n_kudos) FROM user_and_count))
-            LIMIT 1""", nativeQuery = true)
+              AND u.username = (SELECT username FROM user_and_count WHERE n_kudos = (SELECT MAX(n_kudos) FROM user_and_count) LIMIT 1)
+            """, nativeQuery = true)
     List<Object[]> getUserWhoGotMostOfGivenKudosVariationAndItsCurrentProject(String kudosVariationName);
 
+    // Kerem's Query.
     @Query(value = """
             WITH usernames AS
                      (
@@ -90,6 +91,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
               AND w.project_id = p.project_id
               AND p.project_name = ?1
               AND u1.username IN (SELECT DISTINCT username FROM usernames)
-            LIMIT 1""", nativeQuery = true)
+            LIMIT 3""", nativeQuery = true)
     List<Object[]> getUserWhoWorksInGivenProjectAndReceivedAllKudosVariationsAndSentAnyKudos(String projectName);
 }

@@ -37,7 +37,7 @@ public class UserController {
         return userService.getUserWhoGotMostOfGivenKudosVariationAndItsCurrentProject(kudosVariation);
     }
 
-    @PostMapping(value = "/user/project/obtained-all-kudos-variation/sent-any-kudos/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/user/project/obtained-all-kudos-variation/sent-any-kudos", consumes = MediaType.APPLICATION_JSON_VALUE)
     public UserIdentifierResponse getUserWhoWorksInGivenProjectAndReceivedAllKudosVariationsAndSentAnyKudos(
             @RequestBody ProjectDto projectDto) {
         return userService.getUserWhoWorksInGivenProjectAndReceivedAllKudosVariationsAndSentAnyKudos(projectDto.getProjectName());

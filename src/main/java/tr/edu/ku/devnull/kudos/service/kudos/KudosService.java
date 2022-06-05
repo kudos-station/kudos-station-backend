@@ -130,4 +130,14 @@ public class KudosService {
 
         return kudosIdentifierDto;
     }
+
+    public UsernameListResponse getUsersWhoSentAmountOfKudosButDidNotHasAmountOfKudos(String kudosVariation) {
+
+        List<Object[]> resultSet = kudosRepository
+                .getUsersWhoSentAmountOfKudosButDidNotHasAmountOfKudos(kudosVariation);
+
+        return UsernameListResponse.builder()
+                .usernames(resultSet.stream().map(e -> (String) e[0]).collect(Collectors.toList()))
+                .build();
+    }
 }

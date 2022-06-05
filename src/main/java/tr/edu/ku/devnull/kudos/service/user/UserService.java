@@ -45,7 +45,7 @@ public class UserService {
         String currentUserRole = authorityRepository.getRoleByUsername(u.getUsername());
 
         UserProfileResponse userProfileResponse = userMapper.entityToUserProfile(user);
-        String userDepartment = departmentRepository.getUsersDepartmentByUsername(u.getUsername());
+        List<String> userDepartment = departmentRepository.getUsersDepartmentByUsername(u.getUsername());
         List<String> userProjects = projectRepository.getUsersProjectsByUsername(u.getUsername());
 
         userProfileResponse.setAuthorities(currentUserRole);
@@ -58,7 +58,7 @@ public class UserService {
     public UserProfileResponse getUser(String username) {
 
         UserProfileResponse userProfileResponse = userMapper.entityToUserProfile(userRepository.getUserByUsername(username));
-        String userDepartment = departmentRepository.getUsersDepartmentByUsername(username);
+        List<String> userDepartment = departmentRepository.getUsersDepartmentByUsername(username);
         List<String> userProjects = projectRepository.getUsersProjectsByUsername(username);
         String currentUserRole = authorityRepository.getRoleByUsername(username);
 
@@ -95,9 +95,10 @@ public class UserService {
         List<Object[]> resultSet = userRepository
                 .getUserWhoGotMostOfGivenKudosVariationAndItsCurrentProject(kudosVariationName);
 
+
         return UsernameAndProjectResponse.builder()
                 .username((String) resultSet.get(0)[0])
-                .project((String) resultSet.get(0)[1])
+                .project(resultSet.stream().map(e -> (String) e[1]).collect(Collectors.toList()))
                 .build();
     }
 
@@ -106,9 +107,9 @@ public class UserService {
                 .getUserWhoWorksInGivenProjectAndReceivedAllKudosVariationsAndSentAnyKudos(projectName);
 
         return UserIdentifierResponse.builder()
-                .username((String) resultSet.get(0)[0])
-                .firstName((String) resultSet.get(0)[1])
-                .lastName((String) resultSet.get(0)[2])
+                .usernames(resultSet.stream().map(e -> (String) e[0]).collect(Collectors.toList()))
+                .firstNames(resultSet.stream().map(e -> (String) e[1]).collect(Collectors.toList()))
+                .lastNames(resultSet.stream().map(e -> (String) e[2]).collect(Collectors.toList()))
                 .build();
     }
 }

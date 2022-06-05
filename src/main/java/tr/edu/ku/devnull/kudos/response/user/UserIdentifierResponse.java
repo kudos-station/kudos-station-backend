@@ -3,10 +3,12 @@ package tr.edu.ku.devnull.kudos.response.user;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class UserIdentifierResponse {
-    private String username;
-    private String firstName;
-    private String lastName;
+    private List<String> usernames;
+    private List<String> firstNames;
+    private List<String> lastNames;
 }

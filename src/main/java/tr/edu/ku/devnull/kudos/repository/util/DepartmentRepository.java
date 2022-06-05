@@ -14,7 +14,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     @Query(value = "SELECT D.department_name FROM works_in AS WI, department AS D, \"user\" AS U" +
             " WHERE WI.department_id = D.department_id AND U.user_id = WI.user_id AND U.username = ?1", nativeQuery = true)
-    String getUsersDepartmentByUsername(String username);
+    List<String> getUsersDepartmentByUsername(String username);
 
     @Query(value = "SELECT D.department_name FROM department as D ", nativeQuery = true)
     List<String> getAllDepartmentNames();
