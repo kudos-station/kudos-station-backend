@@ -64,7 +64,7 @@ public class KudosController {
     }
 
     @GetMapping("/user/scoreboard")
-    public ResponseEntity<ScoreboardResponse> getScoreboard() {
+    public ResponseEntity<List<ScoreboardResponse>> getScoreboard() {
         return new ResponseEntity<>(kudosService.getScoreboard(), HttpStatus.OK);
     }
 

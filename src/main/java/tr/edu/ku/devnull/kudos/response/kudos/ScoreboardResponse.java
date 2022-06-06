@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @Builder
 public class ScoreboardResponse {
-    List<String> usernames;
-    List<BigInteger> totalCount;
+    String username;
+    BigInteger totalCount;
 }

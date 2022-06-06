@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import tr.edu.ku.devnull.kudos.entity.kudos.Kudos;
+import tr.edu.ku.devnull.kudos.response.kudos.ScoreboardResponse;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -61,7 +62,7 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
     @Query(value = """
             SELECT *
             FROM kudos AS k
-            WHERE k.recipient_username = (SELECT u.username
+            WHERE k.recipient_username IN (SELECT u.username
                                           FROM "user" AS u,
                                                department AS d
                                           WHERE d.department_name = ?1

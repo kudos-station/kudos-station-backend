@@ -153,13 +153,15 @@ public class KudosService {
                 .build();
     }
 
-    public ScoreboardResponse getScoreboard() {
+    public List<ScoreboardResponse> getScoreboard() {
         List<Object[]> entrySet = kudosRepository.getScoreboard();
+        List<ScoreboardResponse> resultSet = new ArrayList<>();
 
-        return ScoreboardResponse.builder()
-                .usernames(entrySet.stream().map(e -> (String) e[0]).collect(Collectors.toList()))
-                .totalCount(entrySet.stream().map(e -> (BigInteger) e[1]).collect(Collectors.toList()))
-                .build();
+        for(Object[] o: entrySet) {
+            resultSet.add(ScoreboardResponse.builder().username((String) o[0]).totalCount((BigInteger) o[1]).build());
+        }
+
+        return resultSet;
     }
 
     public KudosCountResponse getKudosCount(String username) {
@@ -169,7 +171,7 @@ public class KudosService {
     }
 
     // This method runs periodically for generating fake data.
-    @Scheduled(fixedDelay = 900000)
+    @Scheduled(fixedRate = 900000)
     public void sendKudosPeriodically() {
         List<Integer> userIndices = new ArrayList<>();
 
