@@ -1,7 +1,10 @@
 package tr.edu.ku.devnull.kudos.service.kudos;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import tr.edu.ku.devnull.kudos.dto.kudos.KudosIdentifierDto;
 import tr.edu.ku.devnull.kudos.entity.kudos.Kudos;
 import tr.edu.ku.devnull.kudos.entity.kudos.KudosVariation;
@@ -9,17 +12,23 @@ import tr.edu.ku.devnull.kudos.mapper.kudos.KudosMapper;
 import tr.edu.ku.devnull.kudos.repository.kudos.KudosRepository;
 import tr.edu.ku.devnull.kudos.repository.kudos.KudosVariationRepository;
 import tr.edu.ku.devnull.kudos.repository.relation.HasVariationRepository;
+import tr.edu.ku.devnull.kudos.repository.user.UserRepository;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosResponse;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosVariationResponse;
 import tr.edu.ku.devnull.kudos.response.user.UsernameListResponse;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
 public class KudosService {
 
     private final KudosRepository kudosRepository;
+
+    private final UserRepository userRepository;
 
     private final KudosVariationRepository kudosVariationRepository;
 
@@ -30,9 +39,11 @@ public class KudosService {
     private final int IS_SUCCESSFUL = 1;
 
     @Autowired
-    public KudosService(KudosRepository kudosRepository, KudosVariationRepository kudosVariationRepository,
+    public KudosService(KudosRepository kudosRepository, UserRepository userRepository,
+                        KudosVariationRepository kudosVariationRepository,
                         HasVariationRepository hasVariationRepository, KudosMapper kudosMapper) {
         this.kudosRepository = kudosRepository;
+        this.userRepository = userRepository;
         this.kudosVariationRepository = kudosVariationRepository;
         this.hasVariationRepository = hasVariationRepository;
         this.kudosMapper = kudosMapper;
@@ -139,5 +150,43 @@ public class KudosService {
         return UsernameListResponse.builder()
                 .usernames(resultSet.stream().map(e -> (String) e[0]).collect(Collectors.toList()))
                 .build();
+    }
+
+    // This method runs periodically for generating fake data.
+    @Scheduled(fixedDelay = 900000)
+    public void sendKudosPeriodically() {
+        List<Integer> userIndices = new ArrayList<>();
+
+        Collections.addAll(userIndices, 1, 2, 4, 5, 6, 7);
+
+        for (int i = 20; i < 168; i++) {
+            userIndices.add(i);
+        }
+
+        String sender = userRepository.getUsernameByUserId(userIndices.get(new Random().nextInt(userIndices.size())));
+
+        String recipient = userRepository.getUsernameByUserId(userIndices.get(new Random().nextInt(userIndices.size())));
+
+        List<KudosVariation> kudosVariationList = kudosVariationRepository.getKudosVariations();
+
+        String kudosVariation = kudosVariationList
+                .get(new Random().nextInt(kudosVariationList.size()))
+                .getKudosVariationName();
+
+        if (sender.equalsIgnoreCase(recipient)) {
+            return;
+        }
+
+        int status = kudosRepository.insertKudos(sender, recipient);
+
+        if (status == IS_SUCCESSFUL) {
+            Kudos lastKudos = kudosRepository.getLastReceivedKudos(recipient);
+
+            if (lastKudos != null) {
+                KudosVariation kudosVar = kudosVariationRepository.getKudosVariation(kudosVariation);
+                hasVariationRepository.insertHasVariation(lastKudos.getKudosID(), kudosVar.getKudosVariationID());
+            }
+        }
+
     }
 }

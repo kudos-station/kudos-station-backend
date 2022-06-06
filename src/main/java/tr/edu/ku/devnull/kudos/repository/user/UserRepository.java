@@ -93,4 +93,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
               AND u1.username IN (SELECT DISTINCT username FROM usernames)
             LIMIT 3""", nativeQuery = true)
     List<Object[]> getUserWhoWorksInGivenProjectAndReceivedAllKudosVariationsAndSentAnyKudos(String projectName);
+
+    // This repository call is for generating random data, and it is not connected to any endpoints.
+    @Query(value = "SELECT U.username FROM \"user\" AS U WHERE U.user_id = ?1", nativeQuery = true)
+    String getUsernameByUserId(Integer userId);
 }
