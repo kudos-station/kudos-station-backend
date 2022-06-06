@@ -40,7 +40,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "DELETE FROM \"user\" WHERE username = ?1", nativeQuery = true)
+    @Query(value = "DELETE FROM \"user\" AS U WHERE U.username = ?1", nativeQuery = true)
     int deleteUserByUsername(String username);
 
     // Irmak's Query.

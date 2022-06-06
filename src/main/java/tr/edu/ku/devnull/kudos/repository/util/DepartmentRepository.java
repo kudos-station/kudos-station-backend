@@ -26,4 +26,9 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "INSERT INTO department(department_name, manager_id) VALUES (?1, ?2)", nativeQuery = true)
     int insertDepartment(String departmentName, Integer managerID);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "DELETE FROM department as D WHERE D.department_name = ?1", nativeQuery = true)
+    int deleteDepartmentByName(String departmentName);
 }

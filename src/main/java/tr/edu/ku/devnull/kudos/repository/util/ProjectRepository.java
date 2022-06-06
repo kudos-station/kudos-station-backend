@@ -26,4 +26,17 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "INSERT INTO project(project_name, department_id) VALUES (?1, ?2)", nativeQuery = true)
     int insertProject(String projectName, Integer departmentID);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "DELETE FROM project AS P WHERE P.project_name = ?1", nativeQuery = true)
+    int deleteProject(String projectName);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = """
+            DELETE
+            FROM project AS P
+            WHERE P.department_id = (SELECT D.department_id FROM department AS D WHERE D.department_name = ?1)""", nativeQuery = true)
+    int deleteProjectsOfDepartment(String departmentName);
 }

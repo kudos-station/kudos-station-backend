@@ -36,4 +36,16 @@ public class WorksOnService {
 
         return worksOnRepository.insertToWorksOn(userID, departmentID, projectID, worksOnDto.getWorkHours()) == IS_SUCCESSFUL;
     }
+
+    public boolean deleteWorksOn(String username) {
+        int statusForWorksOn = worksOnRepository.deleteWorksOnRelation(username);
+        return statusForWorksOn == IS_SUCCESSFUL;
+    }
+
+    public boolean deleteWorksOnWithProjectName(String username, String projectName) {
+        int statusForWorksOn = worksOnRepository.deleteWorksOnRelationWithProjectName(username, projectName);
+        return statusForWorksOn == IS_SUCCESSFUL;
+    }
+
+
 }

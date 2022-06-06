@@ -30,6 +30,6 @@ public interface AuthorityRepository extends JpaRepository<Authority, Long> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "DELETE FROM authority WHERE username = ?1", nativeQuery = true)
+    @Query(value = "DELETE FROM authority as A WHERE A.username = ?1", nativeQuery = true)
     int deleteUserRoleByUsername(String username);
 }

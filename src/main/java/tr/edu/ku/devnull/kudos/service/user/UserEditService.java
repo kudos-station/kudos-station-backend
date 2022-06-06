@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tr.edu.ku.devnull.kudos.dto.user.CreateUserDto;
 import tr.edu.ku.devnull.kudos.dto.user.UpdateUserRoleDto;
+import tr.edu.ku.devnull.kudos.repository.relation.WorksInRepository;
+import tr.edu.ku.devnull.kudos.repository.relation.WorksOnRepository;
 import tr.edu.ku.devnull.kudos.repository.user.AuthorityRepository;
 import tr.edu.ku.devnull.kudos.repository.user.UserRepository;
 
@@ -14,12 +16,19 @@ public class UserEditService {
 
     private final AuthorityRepository authorityRepository;
 
+    private final WorksInRepository worksInRepository;
+
+    private final WorksOnRepository worksOnRepository;
+
     private final int IS_SUCCESSFUL = 1;
 
     @Autowired
-    public UserEditService(UserRepository userRepository, AuthorityRepository authorityRepository) {
+    public UserEditService(UserRepository userRepository, AuthorityRepository authorityRepository,
+                           WorksInRepository worksInRepository, WorksOnRepository worksOnRepository) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
+        this.worksInRepository = worksInRepository;
+        this.worksOnRepository = worksOnRepository;
     }
 
     public boolean createUser(CreateUserDto createUserDto) {
@@ -42,9 +51,12 @@ public class UserEditService {
     }
 
     public boolean deleteUser(String username) {
-        int statusForRole = authorityRepository.deleteUserRoleByUsername(username);
+        worksOnRepository.deleteWorksOnRelation(username);
+        worksInRepository.deleteWorksInRelation(username);
+        authorityRepository.deleteUserRoleByUsername(username);
+
         int statusForUser = userRepository.deleteUserByUsername(username);
 
-        return statusForRole == IS_SUCCESSFUL && statusForUser == IS_SUCCESSFUL;
+        return statusForUser == IS_SUCCESSFUL;
     }
 }

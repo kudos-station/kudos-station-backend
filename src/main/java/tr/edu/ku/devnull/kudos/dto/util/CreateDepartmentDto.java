@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateDepartmentDto {
     private String departmentName;
-    private String managerName;
+    private String managerUsername;
 }

@@ -157,7 +157,7 @@ public class KudosService {
         List<Object[]> entrySet = kudosRepository.getScoreboard();
         List<ScoreboardResponse> resultSet = new ArrayList<>();
 
-        for(Object[] o: entrySet) {
+        for (Object[] o : entrySet) {
             resultSet.add(ScoreboardResponse.builder().username((String) o[0]).totalCount((BigInteger) o[1]).build());
         }
 

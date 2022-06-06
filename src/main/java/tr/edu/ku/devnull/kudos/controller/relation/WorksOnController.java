@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import tr.edu.ku.devnull.kudos.dto.util.DeleteWorksOnDto;
 import tr.edu.ku.devnull.kudos.dto.util.WorksOnDto;
 import tr.edu.ku.devnull.kudos.service.relation.WorksOnService;
 
@@ -29,8 +30,18 @@ public class WorksOnController {
 
         return ResponseEntity.created(URI.create("/works-on/" +
                 worksOnDto.getUsername() + "/" +
-                worksOnDto.getDepartmentName().replace(" ", "_").toLowerCase() + "/" +
-                worksOnDto.getProjectName().replace(" ", "_").toLowerCase() + "/" +
+                worksOnDto.getDepartmentName().replace(" ", "-").toLowerCase() + "/" +
+                worksOnDto.getProjectName().replace(" ", "-").toLowerCase() + "/" +
                 worksOnDto.getWorkHours())).body(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/admin/works-on/delete")
+    public ResponseEntity<?> removeUserFromProject(@RequestBody DeleteWorksOnDto deleteWorksOnDto) {
+
+        if (!worksOnService.deleteWorksOnWithProjectName(deleteWorksOnDto.getUsername(), deleteWorksOnDto.getProjectName())) {
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

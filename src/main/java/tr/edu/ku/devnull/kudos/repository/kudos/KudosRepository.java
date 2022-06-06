@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import tr.edu.ku.devnull.kudos.entity.kudos.Kudos;
-import tr.edu.ku.devnull.kudos.response.kudos.ScoreboardResponse;
 
 import java.math.BigInteger;
 import java.util.List;

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import tr.edu.ku.devnull.kudos.dto.util.CreateProjectDto;
+import tr.edu.ku.devnull.kudos.dto.util.ProjectDto;
 import tr.edu.ku.devnull.kudos.response.util.ProjectNameResponse;
 import tr.edu.ku.devnull.kudos.service.util.ProjectService;
 
@@ -37,7 +38,17 @@ public class ProjectController {
         }
 
         return ResponseEntity.created(URI.create("/department/" +
-                        createProjectDto.getProjectName().replace(" ", "_").toLowerCase()))
+                        createProjectDto.getProjectName().replace(" ", "-").toLowerCase()))
                 .body(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/admin/project/delete-project")
+    public ResponseEntity<?> deleteProject(@RequestBody ProjectDto projectDto) {
+
+        if (!projectService.deleteProject(projectDto.getProjectName())) {
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
 }

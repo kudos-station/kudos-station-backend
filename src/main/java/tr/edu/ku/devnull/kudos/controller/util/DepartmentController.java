@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import tr.edu.ku.devnull.kudos.dto.util.CreateDepartmentDto;
+import tr.edu.ku.devnull.kudos.dto.util.DepartmentDto;
 import tr.edu.ku.devnull.kudos.response.util.DepartmentNameResponse;
 import tr.edu.ku.devnull.kudos.service.util.DepartmentService;
 
@@ -29,7 +30,7 @@ public class DepartmentController {
         return new ResponseEntity<>(departmentService.getAllDepartmentNames(), HttpStatus.OK);
     }
 
-    @PostMapping("/admin/project/create-department")
+    @PostMapping("/admin/department/create-department")
     public ResponseEntity<?> createDepartment(@RequestBody CreateDepartmentDto createDepartmentDto) {
 
         if (!departmentService.insertDepartment(createDepartmentDto)) {
@@ -37,6 +38,15 @@ public class DepartmentController {
         }
 
         return ResponseEntity.created(URI.create("/department/" +
-                createDepartmentDto.getDepartmentName())).body(HttpStatus.CREATED);
+                createDepartmentDto.getDepartmentName().replace(' ', '-').toLowerCase())).body(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/admin/department/delete-department")
+    public ResponseEntity<?> deleteDepartment(@RequestBody DepartmentDto departmentDto) {
+        if (!departmentService.deleteDepartment(departmentDto.getDepartmentName())) {
+            return ResponseEntity.badRequest().body(HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
 }
