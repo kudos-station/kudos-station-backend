@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import tr.edu.ku.devnull.kudos.entity.kudos.Kudos;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -94,4 +95,18 @@ public interface KudosRepository extends JpaRepository<Kudos, Long> {
             HAVING COUNT(*) > 2
             LIMIT 3""", nativeQuery = true)
     List<Object[]> getUsersWhoSentAmountOfKudosButDidNotHasAmountOfKudos(String kudosVariation);
+
+    @Query(value = """
+            SELECT k.recipient_username, COUNT(k.recipient_username) as total_count
+            FROM kudos AS k
+            GROUP BY k.recipient_username
+            ORDER BY total_count DESC
+            LIMIT 10""", nativeQuery = true)
+    List<Object[]> getScoreboard();
+
+    @Query(value = """
+            SELECT COUNT(k.recipient_username) as total_count
+            FROM "user" as U, kudos as K
+            WHERE U.username = K.recipient_username AND U.username = ?1""", nativeQuery = true)
+    BigInteger getKudosCountByUsername(String username);
 }

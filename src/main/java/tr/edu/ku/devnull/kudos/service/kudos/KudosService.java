@@ -3,8 +3,6 @@ package tr.edu.ku.devnull.kudos.service.kudos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import tr.edu.ku.devnull.kudos.dto.kudos.KudosIdentifierDto;
 import tr.edu.ku.devnull.kudos.entity.kudos.Kudos;
 import tr.edu.ku.devnull.kudos.entity.kudos.KudosVariation;
@@ -13,10 +11,13 @@ import tr.edu.ku.devnull.kudos.repository.kudos.KudosRepository;
 import tr.edu.ku.devnull.kudos.repository.kudos.KudosVariationRepository;
 import tr.edu.ku.devnull.kudos.repository.relation.HasVariationRepository;
 import tr.edu.ku.devnull.kudos.repository.user.UserRepository;
+import tr.edu.ku.devnull.kudos.response.kudos.KudosCountResponse;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosResponse;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosVariationResponse;
+import tr.edu.ku.devnull.kudos.response.kudos.ScoreboardResponse;
 import tr.edu.ku.devnull.kudos.response.user.UsernameListResponse;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -149,6 +150,21 @@ public class KudosService {
 
         return UsernameListResponse.builder()
                 .usernames(resultSet.stream().map(e -> (String) e[0]).collect(Collectors.toList()))
+                .build();
+    }
+
+    public ScoreboardResponse getScoreboard() {
+        List<Object[]> entrySet = kudosRepository.getScoreboard();
+
+        return ScoreboardResponse.builder()
+                .usernames(entrySet.stream().map(e -> (String) e[0]).collect(Collectors.toList()))
+                .totalCount(entrySet.stream().map(e -> (BigInteger) e[1]).collect(Collectors.toList()))
+                .build();
+    }
+
+    public KudosCountResponse getKudosCount(String username) {
+        return KudosCountResponse.builder()
+                .totalCount(kudosRepository.getKudosCountByUsername(username))
                 .build();
     }
 

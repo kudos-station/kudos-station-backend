@@ -20,7 +20,7 @@ public class WorksInController {
         this.worksInService = worksInService;
     }
 
-    @PostMapping("/admin/works-in/create-relation/")
+    @PostMapping("/admin/works-in/create-relation")
     public ResponseEntity<?> insertToWorksIn(@RequestBody WorksInDto worksInDto) {
 
         if (!worksInService.insertToWorksIn(worksInDto)) {

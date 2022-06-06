@@ -6,8 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tr.edu.ku.devnull.kudos.dto.util.DepartmentDto;
+import tr.edu.ku.devnull.kudos.response.kudos.KudosCountResponse;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosResponse;
 import tr.edu.ku.devnull.kudos.response.kudos.KudosVariationResponse;
+import tr.edu.ku.devnull.kudos.response.kudos.ScoreboardResponse;
 import tr.edu.ku.devnull.kudos.response.user.UsernameListResponse;
 import tr.edu.ku.devnull.kudos.service.kudos.KudosService;
 
@@ -59,6 +61,16 @@ public class KudosController {
     @GetMapping("/user/kudos/kudos-variation/{kudos-variation-name}/given-range")
     public ResponseEntity<UsernameListResponse> getUsersWhoSentAmountOfKudosButDidNotHasAmountOfKudos(@PathVariable("kudos-variation-name") String kudosVariationName) {
         return new ResponseEntity<>(kudosService.getUsersWhoSentAmountOfKudosButDidNotHasAmountOfKudos(kudosVariationName), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/scoreboard")
+    public ResponseEntity<ScoreboardResponse> getScoreboard() {
+        return new ResponseEntity<>(kudosService.getScoreboard(), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/total-kudos/{username}")
+    public ResponseEntity<KudosCountResponse> getScoreboard(@PathVariable("username") String username) {
+        return new ResponseEntity<>(kudosService.getKudosCount(username), HttpStatus.OK);
     }
 
     @PostMapping(value = "/user/kudos/received-all-variations/from-department", consumes = MediaType.APPLICATION_JSON_VALUE)

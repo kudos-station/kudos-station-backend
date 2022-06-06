@@ -29,7 +29,7 @@ public class DepartmentController {
         return new ResponseEntity<>(departmentService.getAllDepartmentNames(), HttpStatus.OK);
     }
 
-    @PostMapping("/admin/project/create-department/")
+    @PostMapping("/admin/project/create-department")
     public ResponseEntity<?> createDepartment(@RequestBody CreateDepartmentDto createDepartmentDto) {
 
         if (!departmentService.insertDepartment(createDepartmentDto)) {

@@ -29,7 +29,7 @@ public class ProjectController {
         return new ResponseEntity<>(projectService.getAllProjectNames(), HttpStatus.OK);
     }
 
-    @PostMapping("/admin/project/create-project/")
+    @PostMapping("/admin/project/create-project")
     public ResponseEntity<?> createProject(@RequestBody CreateProjectDto createProjectDto) {
 
         if (!projectService.insertProject(createProjectDto)) {
